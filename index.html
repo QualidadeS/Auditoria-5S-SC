@@ -453,6 +453,16 @@
                         <input type="text" class="obs-input" data-cod="5.4" placeholder="Observação..." data-manus_clickable="true" data-manus_click_id="144">
                         <div class="photo-section"><label class="photo-btn" onclick="this.nextElementSibling.click()" data-manus_clickable="true" data-manus_click_id="145">📸 FOTO</label><input type="file" accept="image/*" capture="environment" style="display:none" onchange="addPhoto(this, '5.4')"><div class="photo-preview" id="preview-5.4"></div></div>
                     </div>
+                    <div class="item" id="item-5.5" style="border-left: 4px solid #2563eb; background: #f8fbff;">
+                        <div class="item-label">5.5. As ROs do setor são apresentadas dentro do prazo?</div>
+                        <div class="item-lembrete">Verificação das ROs em atraso do setor no mês da auditoria.</div>
+                        <div class="radio-group">
+                            <label class="radio-wrapper"><input type="radio" name="5.5" value="0" onchange="calcularScore('auto')"><div class="radio-label">🔴 Não atende</div></label>
+                            <label class="radio-wrapper"><input type="radio" name="5.5" value="3" onchange="calcularScore('auto')"><div class="radio-label">🟢 Atende</div></label>
+                        </div>
+                        <input type="text" class="obs-input" data-cod="5.5" placeholder="ROs em atraso / observação...">
+                        <div id="ros-5.5" style="font-size:12px; margin-top:8px; color:#475569;">A consulta automática será preenchida quando conectado ao Apps Script.</div>
+                    </div>
                     <div class="item" style="border-left: 4px solid var(--primary); background: #fdfdfd;">
                         <div class="item-label">5.2. Conhecimento sobre Qualidade e Valores (Entrevista)</div>
                         <select id="pergunta-5.2" style="margin-bottom: 10px;" data-manus_clickable="true" data-manus_click_id="146">
@@ -673,7 +683,7 @@
             };
             
             loadingText.innerText = "Processando Checklist...";
-            const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4'] };
+            const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4','5.5'] };
             let totalPerc = 0;
             for (let sId in sensoMap) {
                 let sP = 0;
@@ -751,7 +761,8 @@
                 { id: 'auto', nome: '5. SHITSUKE - SENSO DE AUTO DISCIPLINA', itens: [
                     { cod: '5.1', label: '5.1. O lixo é descartado de forma correta?', lembrete: 'Lixeiros conforme identificação (orgânico, reciclável)...' },
                     { cod: '5.3', label: '5.3. Informações e indicadores atualizados?', lembrete: 'Quadros de metas, OTIF, qualidade, auditoria 5S...' },
-                    { cod: '5.4', label: '5.4. Tratativa de problemas anteriores?', lembrete: 'Ações do plano anterior executadas ou em andamento...' }
+                    { cod: '5.4', label: '5.4. Tratativa de problemas anteriores?', lembrete: 'Ações do plano anterior executadas ou em andamento...' },
+                    { cod: '5.5', label: '5.5. As ROs do setor são apresentadas dentro do prazo?', lembrete: 'Verificação das ROs em atraso do setor no mês da auditoria.' }
                 ]}
             ];
             let html = '';
@@ -827,7 +838,7 @@
         function limparFormulario() { if(confirm("Deseja limpar todos os campos?")) location.reload(); }
         
         function calcularScore(sid) {
-            const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4'] };
+            const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4','5.5'] };
             const ids = sensoMap[sid]; let total = 0, count = 0;
             ids.forEach(id => { const v = document.querySelector(`input[name="${id}"]:checked`); if(v) { total += parseInt(v.value); count++; } });
             const perc = count ? (total / (ids.length * 3) * 100).toFixed(1) : 0;
