@@ -279,7 +279,7 @@
                 </div>
                 <div class="info-item">
                     <div class="info-label">Data</div>
-                    <input type="date" id="data" data-manus_clickable="true" data-manus_click_id="5">
+                    <input type="date" id="data" onchange="carregarRosAtrasadas()" data-manus_clickable="true" data-manus_click_id="5">
                 </div>
             </div>
         </header>
@@ -457,11 +457,11 @@
                         <div class="item-label">5.5. As ROs do setor são apresentadas dentro do prazo?</div>
                         <div class="item-lembrete">Verificação das ROs em atraso do setor no mês da auditoria.</div>
                         <div class="radio-group">
-                            <label class="radio-wrapper"><input type="radio" name="5.5" value="0" onchange="calcularScore('auto')"><div class="radio-label">🔴 Não atende</div></label>
-                            <label class="radio-wrapper"><input type="radio" name="5.5" value="3" onchange="calcularScore('auto')"><div class="radio-label">🟢 Atende</div></label>
+                            <label class="radio-wrapper"><input type="radio" name="5.5" value="0" disabled onchange="calcularScore('auto')"><div class="radio-label">🔴 Não atende</div></label>
+                            <label class="radio-wrapper"><input type="radio" name="5.5" value="3" disabled onchange="calcularScore('auto')"><div class="radio-label">🟢 Atende</div></label>
                         </div>
-                        <input type="text" class="obs-input" data-cod="5.5" placeholder="ROs em atraso / observação...">
-                        <div id="ros-5.5" style="font-size:12px; margin-top:8px; color:#475569;">A consulta automática será preenchida quando conectado ao Apps Script.</div>
+                        <input type="text" class="obs-input" data-cod="5.5" placeholder="ROs em atraso / observação..." readonly>
+                        <div id="ros-5.5" style="font-size:12px; margin-top:8px; color:#475569;">Selecione o setor para verificar as ROs.</div>
                     </div>
                     <div class="item" style="border-left: 4px solid var(--primary); background: #fdfdfd;">
                         <div class="item-label">5.2. Conhecimento sobre Qualidade e Valores (Entrevista)</div>
@@ -575,8 +575,71 @@
             // As duas consultas são independentes: uma busca as ações e a outra a escala.
             await Promise.allSettled([
                 carregarAcoesReais(),
-                carregarAuditoresEscalados(setor)
+                carregarAuditoresEscalados(setor),
+                carregarRosAtrasadas()
             ]);
+        }
+
+        async function carregarRosAtrasadas() {
+            const box = document.getElementById('ros-5.5');
+            const setor = document.getElementById('setor').value;
+            const data = document.getElementById('data').value;
+            const ruim = document.querySelector('input[name="5.5"][value="0"]');
+            const atende = document.querySelector('input[name="5.5"][value="3"]');
+            const obs = document.querySelector('.obs-input[data-cod="5.5"]');
+
+            if (!box || !ruim || !atende || !obs) return;
+            ruim.checked = false;
+            atende.checked = false;
+            obs.value = '';
+
+            if (!setor) {
+                box.innerHTML = 'Selecione o setor para verificar as ROs.';
+                calcularScore('auto');
+                return;
+            }
+            if (!data) {
+                box.innerHTML = 'Informe a data da auditoria para verificar as ROs.';
+                calcularScore('auto');
+                return;
+            }
+            if (!URL_PLANILHA) {
+                box.innerHTML = '⚠️ Configure a URL do Apps Script para consultar as ROs.';
+                calcularScore('auto');
+                return;
+            }
+
+            box.innerHTML = '🔎 Consultando ROs em atraso...';
+            try {
+                const url = `${URL_PLANILHA}?tipo=ros&setor=${encodeURIComponent(setor)}&data=${encodeURIComponent(data)}&_=${Date.now()}`;
+                const resp = await fetch(url, { method: 'GET', cache: 'no-store' });
+                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
+                const resultado = await resp.json();
+                if (resultado && resultado.error) throw new Error(resultado.error);
+
+                const ros = resultado && Array.isArray(resultado.ros) ? resultado.ros : [];
+                if (ros.length > 0) {
+                    ruim.checked = true;
+                    obs.value = `${ros.length} RO(s) em atraso: ${ros.map(r => r.ro).join(', ')}`;
+                    box.innerHTML = `<strong>🔴 Não atende — ${ros.length} RO(s) em atraso</strong>` +
+                        `<div style="margin-top:6px;">${ros.map(r => `<strong>RO ${escapeHtml(String(r.ro))}</strong> — em atraso desde ${escapeHtml(r.emAtraso || '-')}<br><span style="color:#64748b;">${escapeHtml(r.unidade || '')}</span>`).join('<div style="height:6px"></div>')}</div>`;
+                } else {
+                    atende.checked = true;
+                    obs.value = 'Nenhuma RO em atraso encontrada para o setor.';
+                    box.innerHTML = '<strong>🟢 Atende — nenhuma RO em atraso encontrada.</strong>';
+                }
+                calcularScore('auto');
+            } catch (erro) {
+                console.error('Erro ao consultar ROs:', erro);
+                box.innerHTML = `⚠️ Não foi possível consultar as ROs: ${escapeHtml(erro.message || String(erro))}`;
+                calcularScore('auto');
+            }
+        }
+
+        function escapeHtml(valor) {
+            return String(valor == null ? '' : valor)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
 
         async function carregarAuditoresEscalados(setorSelecionado) {
@@ -762,13 +825,28 @@
                     { cod: '5.1', label: '5.1. O lixo é descartado de forma correta?', lembrete: 'Lixeiros conforme identificação (orgânico, reciclável)...' },
                     { cod: '5.3', label: '5.3. Informações e indicadores atualizados?', lembrete: 'Quadros de metas, OTIF, qualidade, auditoria 5S...' },
                     { cod: '5.4', label: '5.4. Tratativa de problemas anteriores?', lembrete: 'Ações do plano anterior executadas ou em andamento...' },
-                    { cod: '5.5', label: '5.5. As ROs do setor são apresentadas dentro do prazo?', lembrete: 'Verificação das ROs em atraso do setor no mês da auditoria.' }
+                    { cod: '5.5', label: '5.5. As ROs do setor são apresentadas dentro do prazo?', lembrete: 'Verificação automática das ROs que estavam em atraso na data da auditoria.' }
                 ]}
             ];
             let html = '';
             checklist.forEach(senso => {
                 html += `<div class="senso-card"><div class="senso-header"><span class="senso-title">${senso.nome}</span><span class="senso-score" id="score-${senso.id}">0%</span></div>`;
                 senso.itens.forEach(it => {
+                    if (it.cod === '5.5') {
+                        html += `
+                        <div class="item" id="item-5.5" style="border-left: 4px solid #2563eb; background: #f8fbff;">
+                            <div class="item-label">${it.label}</div>
+                            <div class="item-lembrete">${it.lembrete}</div>
+                            <div class="radio-group">
+                                <label class="radio-wrapper"><input type="radio" name="5.5" value="0" disabled onchange="calcularScore('auto')"><div class="radio-label">🔴 Não atende</div></label>
+                                <label class="radio-wrapper"><input type="radio" name="5.5" value="3" disabled onchange="calcularScore('auto')"><div class="radio-label">🟢 Atende</div></label>
+                            </div>
+                            <input type="text" class="obs-input" data-cod="5.5" placeholder="ROs em atraso / observação..." readonly>
+                            <div id="ros-5.5" style="font-size:12px; margin-top:8px; color:#475569; line-height:1.55;">Selecione o setor para verificar as ROs.</div>
+                        </div>`;
+                        return;
+                    }
+
                     html += `
                     <div class="item">
                         <div class="item-label">${it.label}</div>
