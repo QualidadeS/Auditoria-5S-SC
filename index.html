@@ -655,7 +655,7 @@
 
             try {
                 const resposta = await fetch(
-                    `${URL_PLANILHA}?tipo=escala&setor=${encodeURIComponent(setorSelecionado)}&_=${Date.now()}`,
+                    `${URL_PLANILHA}?tipo=escala&setor=${encodeURIComponent(setorSelecionado)}&mes=${encodeURIComponent((document.getElementById('data').value || '').split('-')[1] || '')}&_=${Date.now()}`,
                     { method: 'GET', cache: 'no-store' }
                 );
 
