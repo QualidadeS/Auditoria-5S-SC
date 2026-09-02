@@ -584,13 +584,18 @@
             const box = document.getElementById('ros-5.5');
             const setor = document.getElementById('setor').value;
             const data = document.getElementById('data').value;
-            const ruim = document.querySelector('input[name="5.5"][value="0"]');
-            const atende = document.querySelector('input[name="5.5"][value="3"]');
+            const opcoes55 = Array.from(document.querySelectorAll('input[name="5.5"]'));
+            const ruim = opcoes55.find(el => el.value !== '3') || opcoes55[0];
+            const atende = opcoes55.find(el => el.value === '3') || opcoes55[1];
             const obs = document.querySelector('.obs-input[data-cod="5.5"]');
 
             if (!box || !ruim || !atende || !obs) return;
             ruim.checked = false;
             atende.checked = false;
+            // Restaura o valor padrão antes de uma nova consulta. Nos Aquários este valor
+            // é substituído pela pontuação proporcional calculada pelo Apps Script.
+            ruim.value = '0';
+            atende.value = '3';
             obs.value = '';
 
             if (!setor) {
@@ -618,11 +623,63 @@
                 if (resultado && resultado.error) throw new Error(resultado.error);
 
                 const ros = resultado && Array.isArray(resultado.ros) ? resultado.ros : [];
+
+                // Salas Aquário: os 20% do item 5.5 são rateados entre as áreas.
+                if (resultado && resultado.ehAquario) {
+                    const areas = Array.isArray(resultado.areas) ? resultado.areas : [];
+                    const pontos55 = Number(resultado.pontos5_5 == null ? 3 : resultado.pontos5_5);
+                    const percentualItem = Number(resultado.percentualItem == null ? 20 : resultado.percentualItem);
+                    const areasComAtraso = Number(resultado.areasComAtraso || 0);
+
+                    if (areasComAtraso > 0) {
+                        ruim.value = String(pontos55);
+                        ruim.checked = true;
+                    } else {
+                        atende.checked = true;
+                    }
+
+                    const partesObs = [];
+                    areas.forEach(area => {
+                        const lista = Array.isArray(area.ros) ? area.ros : [];
+                        if (lista.length) partesObs.push(`${area.nome}: RO(s) ${lista.map(r => r.ro).join(', ')}`);
+                    });
+                    obs.value = areasComAtraso > 0
+                        ? `Rateio 5.5: ${formatarNumero(percentualItem)}% de 20%. ${partesObs.join(' | ')}`
+                        : '20% de 20%. Nenhuma RO em atraso nas áreas do Aquário.';
+
+                    const cabecalho = areasComAtraso > 0
+                        ? `<strong>🟡 Atende parcialmente — ${formatarNumero(percentualItem)}% dos 20% do item 5.5</strong>`
+                        : '<strong>🟢 Atende — 20% dos 20% do item 5.5</strong>';
+
+                    const htmlAreas = areas.map(area => {
+                        const lista = Array.isArray(area.ros) ? area.ros : [];
+                        if (!lista.length) {
+                            return `<div style="margin-top:9px;padding:8px 10px;background:#f0fdf4;border-radius:6px;border-left:3px solid #16a34a;">` +
+                                `<strong>🟢 ${escapeHtml(area.nome)}</strong> — sem RO em atraso</div>`;
+                        }
+                        const itens = lista.map(r =>
+                            `<div style="margin-top:5px;padding-left:10px;">` +
+                            `<strong>RO ${escapeHtml(String(r.ro))}</strong> — em atraso desde ${escapeHtml(r.emAtraso || '-')}<br>` +
+                            `<span style="color:#64748b;">Setor da RO: ${escapeHtml(r.setor || area.nome)}${r.unidade ? ' • ' + escapeHtml(r.unidade) : ''}</span></div>`
+                        ).join('');
+                        return `<div style="margin-top:9px;padding:8px 10px;background:#fff7ed;border-radius:6px;border-left:3px solid #ea580c;">` +
+                            `<strong>🔴 ${escapeHtml(area.nome)}</strong> — ${lista.length} RO(s) em atraso${itens}</div>`;
+                    }).join('');
+
+                    box.innerHTML = cabecalho +
+                        `<div style="margin-top:6px;color:#64748b;">${areasComAtraso} de ${areas.length} área(s) com atraso. O desconto é somente da parcela dessas áreas.</div>` +
+                        htmlAreas;
+
+                    calcularScore('auto');
+                    return;
+                }
+
+                // Demais setores: regra binária normal do 5.5.
                 if (ros.length > 0) {
                     ruim.checked = true;
                     obs.value = `${ros.length} RO(s) em atraso: ${ros.map(r => r.ro).join(', ')}`;
                     box.innerHTML = `<strong>🔴 Não atende — ${ros.length} RO(s) em atraso</strong>` +
-                        `<div style="margin-top:6px;">${ros.map(r => `<strong>RO ${escapeHtml(String(r.ro))}</strong> — em atraso desde ${escapeHtml(r.emAtraso || '-')}<br><span style="color:#64748b;">${escapeHtml(r.unidade || '')}</span>`).join('<div style="height:6px"></div>')}</div>`;
+                        `<div style="margin-top:6px;">${ros.map(r => `<strong>RO ${escapeHtml(String(r.ro))}</strong> — em atraso desde ${escapeHtml(r.emAtraso || '-')}<br><span style="color:#64748b;">${escapeHtml(r.setor || '')}${r.unidade ? ' • ' + escapeHtml(r.unidade) : ''}</span>`).join('<div style="height:6px"></div>')}</div>`;
                 } else {
                     atende.checked = true;
                     obs.value = 'Nenhuma RO em atraso encontrada para o setor.';
@@ -634,6 +691,12 @@
                 box.innerHTML = `⚠️ Não foi possível consultar as ROs: ${escapeHtml(erro.message || String(erro))}`;
                 calcularScore('auto');
             }
+        }
+
+        function formatarNumero(valor) {
+            const n = Number(valor);
+            if (!Number.isFinite(n)) return String(valor);
+            return n.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
         }
 
         function escapeHtml(valor) {
@@ -751,7 +814,7 @@
             for (let sId in sensoMap) {
                 let sP = 0;
                 sensoMap[sId].forEach(cod => {
-                    const r = document.querySelector(`input[name="${cod}"]:checked`), val = r ? parseInt(r.value) : 0; sP += val;
+                    const r = document.querySelector(`input[name="${cod}"]:checked`), val = r ? parseFloat(r.value) : 0; sP += val;
                     const obsEl = document.querySelector(`input[data-cod="${cod}"]`);
                     let obsFinal = obsEl ? obsEl.value : "";
                     if(cod === '5.2') { 
@@ -918,7 +981,7 @@
         function calcularScore(sid) {
             const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4','5.5'] };
             const ids = sensoMap[sid]; let total = 0, count = 0;
-            ids.forEach(id => { const v = document.querySelector(`input[name="${id}"]:checked`); if(v) { total += parseInt(v.value); count++; } });
+            ids.forEach(id => { const v = document.querySelector(`input[name="${id}"]:checked`); if(v) { total += parseFloat(v.value); count++; } });
             const perc = count ? (total / (ids.length * 3) * 100).toFixed(1) : 0;
             const el = document.getElementById(`score-${sid}`); el.textContent = perc + "%";
             el.style.color = perc >= 90 ? '#16a34a' : perc >= 75 ? '#ca8a04' : '#dc2626';
