@@ -1,7 +1,7 @@
 {
   "name": "Sistema 5S Digital - SETA Matriz",
-  "short_name": "5S SETA Matriz",
-  "description": "Sistema de Gestão 5S Digital - SETA Embalagens - Matriz",
+  "short_name": "Sistema 5S Digital",
+  "description": "Sistema de Gestão 5S Digital",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
