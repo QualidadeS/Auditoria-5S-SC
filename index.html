@@ -2,8 +2,13 @@
 <html lang="pt-BR"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema 5S Digital - Gabrielly Silva</title>
-    <link rel="icon" type="image/png" href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663476236047/aWhAVKuQKCrJuSmh.png">
+    <meta name="theme-color" content="#00467f">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Sistema 5S Digital - Unidade do Espírito Santo</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -92,7 +97,7 @@
             
             <div class="about-section">
                 <h3 class="about-h3">Sistema de Gestão 5S Digital</h3>
-                <p class="about-p">O Sistema de Gestão 5S Digital é uma aplicação web criada para digitalizar, padronizar e facilitar a realização de inspeções baseadas na metodologia 5S. O sistema permite registrar avaliações, calcular resultados automaticamente, anexar evidências fotográficas, acompanhar o histórico das inspeções, visualizar indicadores e controlar ações de melhoria. Esta instalação corresponde a uma versão personalizada para avaliação e utilização nas rotinas internas da SETA.</p>
+                <p class="about-p">O Sistema de Gestão 5S Digital é uma aplicação web criada para digitalizar, padronizar e facilitar a realização de inspeções baseadas na metodologia 5S. O sistema permite registrar avaliações, calcular resultados automaticamente, anexar evidências fotográficas, acompanhar o histórico das inspeções, visualizar indicadores e controlar ações de melhoria. Esta instalação corresponde à versão 0.1, adaptada para avaliação e utilização nas rotinas internas da Unidade do Espírito Santo.</p>
             </div>
 
             <div class="about-section">
@@ -117,11 +122,11 @@
             <div class="about-section">
                 <h3 class="about-h3">INFORMAÇÕES DA VERSÃO</h3>
                 <p class="about-p">
-                    <strong>Versão personalizada:</strong> SETA 1.0.0<br>
+                    <strong>Versão da filial:</strong> Unidade do Espírito Santo 0.1<br>
                     <strong>Produto-base:</strong> Sistema de Gestão 5S Digital 1.0.0<br>
                     <strong>Data da versão:</strong> 14 de agosto de 2026<br>
                     <strong>Status:</strong> Em avaliação operacional<br>
-                    <strong>Identificador da versão:</strong> SETA-1.0.0-20260814<br><br>
+                    <strong>Identificador da versão:</strong> ES-0.1-20260825<br><br>
                     <strong>Tecnologias utilizadas:</strong> Aplicação Web Progressiva (PWA), HTML, CSS, JavaScript, Google Apps Script, Google Sheets e Google Drive.
                 </p>
             </div>
@@ -200,7 +205,7 @@
                 <p class="about-p">
                     <strong>Produto:</strong> Sistema de Gestão 5S Digital<br>
                     <strong>Idealização e desenvolvimento:</strong> Gabrielly Silva<br>
-                    <strong>Versão personalizada:</strong> SETA 1.0.0<br>
+                    <strong>Versão da filial:</strong> Unidade do Espírito Santo 0.1<br>
                     <strong>Ano:</strong> 2026<br><br>
                     Uso autorizado exclusivamente nas atividades internas da SETA.<br><br>
                     © 2026 Gabrielly Silva. Todos os direitos não expressamente autorizados permanecem reservados.
@@ -222,6 +227,8 @@
             <div id="configSection" style="display:none;">
                 <label class="info-label">URL do Google Apps Script:</label>
                 <textarea id="configUrl" style="height: 100px; margin-bottom: 15px; font-family: monospace; font-size: 12px;"></textarea>
+                <label class="info-label">Senha administrativa deste dispositivo:</label>
+                <input type="password" id="newAdminPass" placeholder="Defina ou altere a senha..." style="margin-bottom: 15px;">
                 <button class="btn-save" onclick="testConnection()">⚡ TESTAR CONEXÃO E SALVAR</button>
                 <button class="btn-clear" onclick="copyDirectLink()" style="margin-top:10px; width:100%;">🔗 COPIAR LINK DIRETO</button>
             </div>
@@ -244,23 +251,16 @@
                     <div class="info-label">Setor</div>
                     <select id="setor" onchange="aoMudarSetor()" data-manus_clickable="true" data-manus_click_id="1">
                         <option value="">Selecione o setor...</option>
-                        <option value="Expedição">Expedição</option>
-                        <option value="Infraestrutura">Infraestrutura</option>
-                        <option value="Mecânica (manutenção)">Mecânica (manutenção)</option>
-                        <option value="Clicheria + sala de tintas">Clicheria + sala de tintas</option>
-                        <option value="Plotter">Plotter</option>
-                        <option value="2° turno">2° turno</option>
-                        <option value="Serralheria">Serralheria</option>
-                        <option value="Acabamento">Acabamento</option>
-                        <option value="Recebimento + almoxarifado">Recebimento + almoxarifado</option>
-                        <option value="Acessórios">Acessórios</option>
-                        <option value="Máquinas 1">Máquinas 1</option>
-                        <option value="Máquinas 2">Máquinas 2</option>
-                        <option value="Serviços gerais">Serviços gerais</option>
-                        <option value="Administrativo (rh)">Administrativo (rh)</option>
-                        <option value="Administrativo aquário 1">Administrativo aquário 1</option>
-                        <option value="Administrativo aquário 2">Administrativo aquário 2</option>
-                        <option value="Administrativo aquário 3">Administrativo aquário 3</option>
+                        <option value="ADMINISTRATIVO 1">ADMINISTRATIVO 1</option>
+                        <option value="ADMINISTRATIVO 2">ADMINISTRATIVO 2</option>
+                        <option value="CLICHERIA">CLICHERIA</option>
+                        <option value="EXPEDIÇÃO">EXPEDIÇÃO</option>
+                        <option value="MÁQUINAS">MÁQUINAS</option>
+                        <option value="MANUTENÇÃO">MANUTENÇÃO</option>
+                        <option value="ACABAMENTO">ACABAMENTO</option>
+                        <option value="ACESSÓRIOS">ACESSÓRIOS</option>
+                        <option value="RECEBIMENTO - ALMOXARIFADO">RECEBIMENTO - ALMOXARIFADO</option>
+                        <option value="ÁREA EXTERNA">ÁREA EXTERNA</option>
                     </select>
                 </div>
                 <div class="info-item">
@@ -279,7 +279,7 @@
                 </div>
                 <div class="info-item">
                     <div class="info-label">Data</div>
-                    <input type="date" id="data" onchange="carregarRosAtrasadas()" data-manus_clickable="true" data-manus_click_id="5">
+                    <input type="date" id="data" data-manus_clickable="true" data-manus_click_id="5">
                 </div>
             </div>
         </header>
@@ -453,16 +453,6 @@
                         <input type="text" class="obs-input" data-cod="5.4" placeholder="Observação..." data-manus_clickable="true" data-manus_click_id="144">
                         <div class="photo-section"><label class="photo-btn" onclick="this.nextElementSibling.click()" data-manus_clickable="true" data-manus_click_id="145">📸 FOTO</label><input type="file" accept="image/*" capture="environment" style="display:none" onchange="addPhoto(this, '5.4')"><div class="photo-preview" id="preview-5.4"></div></div>
                     </div>
-                    <div class="item" id="item-5.5" style="border-left: 4px solid #2563eb; background: #f8fbff;">
-                        <div class="item-label">5.5. As ROs do setor são apresentadas dentro do prazo?</div>
-                        <div class="item-lembrete">Verificação das ROs em atraso do setor no mês da auditoria.</div>
-                        <div class="radio-group">
-                            <label class="radio-wrapper"><input type="radio" name="5.5" value="0" disabled onchange="calcularScore('auto')"><div class="radio-label">🔴 Não atende</div></label>
-                            <label class="radio-wrapper"><input type="radio" name="5.5" value="3" disabled onchange="calcularScore('auto')"><div class="radio-label">🟢 Atende</div></label>
-                        </div>
-                        <input type="text" class="obs-input" data-cod="5.5" placeholder="ROs em atraso / observação..." readonly>
-                        <div id="ros-5.5" style="font-size:12px; margin-top:8px; color:#475569;">Selecione o setor para verificar as ROs.</div>
-                    </div>
                     <div class="item" style="border-left: 4px solid var(--primary); background: #fdfdfd;">
                         <div class="item-label">5.2. Conhecimento sobre Qualidade e Valores (Entrevista)</div>
                         <select id="pergunta-5.2" style="margin-bottom: 10px;" data-manus_clickable="true" data-manus_click_id="146">
@@ -511,8 +501,11 @@
     </div>
 
     <script>
-        const STORAGE_KEY = 'GS_5S_CONFIG_URL_V2';
-        let URL_PLANILHA = '';
+        const STORAGE_KEY = 'GS_5S_CONFIG_URL_V3_ES';
+        const ADMIN_PASSWORD_KEY = 'GS_5S_ADMIN_PASSWORD_V1';
+        // URL pública da implantação oficial; não contém senha nem ID interno da planilha.
+        const URL_PLANILHA_PADRAO = 'https://script.google.com/macros/s/AKfycbyAJJYri_gEOzPmj6gQXz97srltW9oS68wSHRmnuJwyCvF7pLDtuw6rAJl33ctFX7WJpw/exec';
+        let URL_PLANILHA = URL_PLANILHA_PADRAO;
         let novasAcoesParaEnviar = [];
         let acoesPendentesCarregadas = [];
 
@@ -551,10 +544,20 @@
         function carregarConfiguracaoSegura() {
             const params = new URLSearchParams(window.location.search);
             const configUrl = params.get('config');
-            URL_PLANILHA = configUrl || lerConfiguracaoLocal();
+            URL_PLANILHA = configUrl || lerConfiguracaoLocal() || URL_PLANILHA_PADRAO;
             if (configUrl) gravarConfiguracaoLocal(URL_PLANILHA);
             const aviso = document.getElementById('setupWarning');
             if (aviso) aviso.style.display = URL_PLANILHA ? 'none' : 'block';
+        }
+
+        function lerSenhaAdministrativa() {
+            try { return window.localStorage ? (localStorage.getItem(ADMIN_PASSWORD_KEY) || '') : ''; }
+            catch (e) { return ''; }
+        }
+
+        function gravarSenhaAdministrativa(valor) {
+            try { if (window.localStorage) localStorage.setItem(ADMIN_PASSWORD_KEY, valor); return true; }
+            catch (e) { return false; }
         }
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
@@ -575,134 +578,8 @@
             // As duas consultas são independentes: uma busca as ações e a outra a escala.
             await Promise.allSettled([
                 carregarAcoesReais(),
-                carregarAuditoresEscalados(setor),
-                carregarRosAtrasadas()
+                carregarAuditoresEscalados(setor)
             ]);
-        }
-
-        async function carregarRosAtrasadas() {
-            const box = document.getElementById('ros-5.5');
-            const setor = document.getElementById('setor').value;
-            const data = document.getElementById('data').value;
-            const opcoes55 = Array.from(document.querySelectorAll('input[name="5.5"]'));
-            const ruim = opcoes55.find(el => el.value !== '3') || opcoes55[0];
-            const atende = opcoes55.find(el => el.value === '3') || opcoes55[1];
-            const obs = document.querySelector('.obs-input[data-cod="5.5"]');
-
-            if (!box || !ruim || !atende || !obs) return;
-            ruim.checked = false;
-            atende.checked = false;
-            // Restaura o valor padrão antes de uma nova consulta. Nos Aquários este valor
-            // é substituído pela pontuação proporcional calculada pelo Apps Script.
-            ruim.value = '0';
-            atende.value = '3';
-            obs.value = '';
-
-            if (!setor) {
-                box.innerHTML = 'Selecione o setor para verificar as ROs.';
-                calcularScore('auto');
-                return;
-            }
-            if (!data) {
-                box.innerHTML = 'Informe a data da auditoria para verificar as ROs.';
-                calcularScore('auto');
-                return;
-            }
-            if (!URL_PLANILHA) {
-                box.innerHTML = '⚠️ Configure a URL do Apps Script para consultar as ROs.';
-                calcularScore('auto');
-                return;
-            }
-
-            box.innerHTML = '🔎 Consultando ROs em atraso...';
-            try {
-                const url = `${URL_PLANILHA}?tipo=ros&setor=${encodeURIComponent(setor)}&data=${encodeURIComponent(data)}&_=${Date.now()}`;
-                const resp = await fetch(url, { method: 'GET', cache: 'no-store' });
-                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
-                const resultado = await resp.json();
-                if (resultado && resultado.error) throw new Error(resultado.error);
-
-                const ros = resultado && Array.isArray(resultado.ros) ? resultado.ros : [];
-
-                // Salas Aquário: os 20% do item 5.5 são rateados entre as áreas.
-                if (resultado && resultado.ehAquario) {
-                    const areas = Array.isArray(resultado.areas) ? resultado.areas : [];
-                    const pontos55 = Number(resultado.pontos5_5 == null ? 3 : resultado.pontos5_5);
-                    const percentualItem = Number(resultado.percentualItem == null ? 20 : resultado.percentualItem);
-                    const areasComAtraso = Number(resultado.areasComAtraso || 0);
-
-                    if (areasComAtraso > 0) {
-                        ruim.value = String(pontos55);
-                        ruim.checked = true;
-                    } else {
-                        atende.checked = true;
-                    }
-
-                    const partesObs = [];
-                    areas.forEach(area => {
-                        const lista = Array.isArray(area.ros) ? area.ros : [];
-                        if (lista.length) partesObs.push(`${area.nome}: RO(s) ${lista.map(r => r.ro).join(', ')}`);
-                    });
-                    obs.value = areasComAtraso > 0
-                        ? `Rateio 5.5: ${formatarNumero(percentualItem)}% de 20%. ${partesObs.join(' | ')}`
-                        : '20% de 20%. Nenhuma RO em atraso nas áreas do Aquário.';
-
-                    const cabecalho = areasComAtraso > 0
-                        ? `<strong>🟡 Atende parcialmente — ${formatarNumero(percentualItem)}% dos 20% do item 5.5</strong>`
-                        : '<strong>🟢 Atende — 20% dos 20% do item 5.5</strong>';
-
-                    const htmlAreas = areas.map(area => {
-                        const lista = Array.isArray(area.ros) ? area.ros : [];
-                        if (!lista.length) {
-                            return `<div style="margin-top:9px;padding:8px 10px;background:#f0fdf4;border-radius:6px;border-left:3px solid #16a34a;">` +
-                                `<strong>🟢 ${escapeHtml(area.nome)}</strong> — sem RO em atraso</div>`;
-                        }
-                        const itens = lista.map(r =>
-                            `<div style="margin-top:5px;padding-left:10px;">` +
-                            `<strong>RO ${escapeHtml(String(r.ro))}</strong> — em atraso desde ${escapeHtml(r.emAtraso || '-')}<br>` +
-                            `<span style="color:#64748b;">Setor da RO: ${escapeHtml(r.setor || area.nome)}${r.unidade ? ' • ' + escapeHtml(r.unidade) : ''}</span></div>`
-                        ).join('');
-                        return `<div style="margin-top:9px;padding:8px 10px;background:#fff7ed;border-radius:6px;border-left:3px solid #ea580c;">` +
-                            `<strong>🔴 ${escapeHtml(area.nome)}</strong> — ${lista.length} RO(s) em atraso${itens}</div>`;
-                    }).join('');
-
-                    box.innerHTML = cabecalho +
-                        `<div style="margin-top:6px;color:#64748b;">${areasComAtraso} de ${areas.length} área(s) com atraso. O desconto é somente da parcela dessas áreas.</div>` +
-                        htmlAreas;
-
-                    calcularScore('auto');
-                    return;
-                }
-
-                // Demais setores: regra binária normal do 5.5.
-                if (ros.length > 0) {
-                    ruim.checked = true;
-                    obs.value = `${ros.length} RO(s) em atraso: ${ros.map(r => r.ro).join(', ')}`;
-                    box.innerHTML = `<strong>🔴 Não atende — ${ros.length} RO(s) em atraso</strong>` +
-                        `<div style="margin-top:6px;">${ros.map(r => `<strong>RO ${escapeHtml(String(r.ro))}</strong> — em atraso desde ${escapeHtml(r.emAtraso || '-')}<br><span style="color:#64748b;">${escapeHtml(r.setor || '')}${r.unidade ? ' • ' + escapeHtml(r.unidade) : ''}</span>`).join('<div style="height:6px"></div>')}</div>`;
-                } else {
-                    atende.checked = true;
-                    obs.value = 'Nenhuma RO em atraso encontrada para o setor.';
-                    box.innerHTML = '<strong>🟢 Atende — nenhuma RO em atraso encontrada.</strong>';
-                }
-                calcularScore('auto');
-            } catch (erro) {
-                console.error('Erro ao consultar ROs:', erro);
-                box.innerHTML = `⚠️ Não foi possível consultar as ROs: ${escapeHtml(erro.message || String(erro))}`;
-                calcularScore('auto');
-            }
-        }
-
-        function formatarNumero(valor) {
-            const n = Number(valor);
-            if (!Number.isFinite(n)) return String(valor);
-            return n.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-        }
-
-        function escapeHtml(valor) {
-            return String(valor == null ? '' : valor)
-                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
 
         async function carregarAuditoresEscalados(setorSelecionado) {
@@ -717,21 +594,32 @@
             auditor2.placeholder = 'Buscando auditor previsto...';
 
             try {
-                const resposta = await fetch(
-                    `${URL_PLANILHA}?tipo=escala&setor=${encodeURIComponent(setorSelecionado)}&mes=${encodeURIComponent((document.getElementById('data').value || '').split('-')[1] || '')}&_=${Date.now()}`,
-                    { method: 'GET', cache: 'no-store' }
-                );
+                const urlEscala = new URL(URL_PLANILHA);
+                const dataInspecao = document.getElementById('data')?.value || '';
+                const mesesCronograma = ['JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO', 'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO'];
+                const mesCronograma = dataInspecao ? mesesCronograma[Number(dataInspecao.split('-')[1]) - 1] : '';
+                urlEscala.searchParams.set('tipo', 'escala');
+                urlEscala.searchParams.set('setor', setorSelecionado);
+                if (mesCronograma) urlEscala.searchParams.set('mes', mesCronograma);
+                if (dataInspecao) urlEscala.searchParams.set('data', dataInspecao);
+                urlEscala.searchParams.set('_', Date.now().toString());
+                const resposta = await fetch(urlEscala.toString(), { method: 'GET', cache: 'no-store' });
 
                 if (!resposta.ok) throw new Error(`Erro HTTP ${resposta.status}`);
 
-                const escala = await resposta.json();
-                if (escala && escala.error) throw new Error(escala.error);
+                const respostaEscala = await resposta.json();
+                if (respostaEscala && respostaEscala.error) throw new Error(respostaEscala.error);
+
+                // Aceita os formatos mais comuns retornados pelo Apps Script.
+                const escala = Array.isArray(respostaEscala) ? (respostaEscala[0] || {}) : (respostaEscala || {});
+                const aud1Retornado = escala.aud1 ?? escala.auditor1 ?? escala.auditor_1 ?? escala.Auditor1 ?? escala['Auditor 1'] ?? '';
+                const aud2Retornado = escala.aud2 ?? escala.auditor2 ?? escala.auditor_2 ?? escala.Auditor2 ?? escala['Auditor 2'] ?? '';
 
                 // Evita preencher dados de um setor anterior se a pessoa trocar rapidamente.
                 if (document.getElementById('setor').value !== setorSelecionado) return;
 
-                auditor1.value = escala && escala.aud1 ? String(escala.aud1).trim() : '';
-                auditor2.value = escala && escala.aud2 ? String(escala.aud2).trim() : '';
+                auditor1.value = String(aud1Retornado).trim();
+                auditor2.value = String(aud2Retornado).trim();
             } catch (erro) {
                 console.error('Erro ao buscar auditores escalados:', erro);
 
@@ -809,12 +697,12 @@
             };
             
             loadingText.innerText = "Processando Checklist...";
-            const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4','5.5'] };
+            const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4'] };
             let totalPerc = 0;
             for (let sId in sensoMap) {
                 let sP = 0;
                 sensoMap[sId].forEach(cod => {
-                    const r = document.querySelector(`input[name="${cod}"]:checked`), val = r ? parseFloat(r.value) : 0; sP += val;
+                    const r = document.querySelector(`input[name="${cod}"]:checked`), val = r ? parseInt(r.value) : 0; sP += val;
                     const obsEl = document.querySelector(`input[data-cod="${cod}"]`);
                     let obsFinal = obsEl ? obsEl.value : "";
                     if(cod === '5.2') { 
@@ -887,29 +775,13 @@
                 { id: 'auto', nome: '5. SHITSUKE - SENSO DE AUTO DISCIPLINA', itens: [
                     { cod: '5.1', label: '5.1. O lixo é descartado de forma correta?', lembrete: 'Lixeiros conforme identificação (orgânico, reciclável)...' },
                     { cod: '5.3', label: '5.3. Informações e indicadores atualizados?', lembrete: 'Quadros de metas, OTIF, qualidade, auditoria 5S...' },
-                    { cod: '5.4', label: '5.4. Tratativa de problemas anteriores?', lembrete: 'Ações do plano anterior executadas ou em andamento...' },
-                    { cod: '5.5', label: '5.5. As ROs do setor são apresentadas dentro do prazo?', lembrete: 'Verificação automática das ROs que estavam em atraso na data da auditoria.' }
+                    { cod: '5.4', label: '5.4. Tratativa de problemas anteriores?', lembrete: 'Ações do plano anterior executadas ou em andamento...' }
                 ]}
             ];
             let html = '';
             checklist.forEach(senso => {
                 html += `<div class="senso-card"><div class="senso-header"><span class="senso-title">${senso.nome}</span><span class="senso-score" id="score-${senso.id}">0%</span></div>`;
                 senso.itens.forEach(it => {
-                    if (it.cod === '5.5') {
-                        html += `
-                        <div class="item" id="item-5.5" style="border-left: 4px solid #2563eb; background: #f8fbff;">
-                            <div class="item-label">${it.label}</div>
-                            <div class="item-lembrete">${it.lembrete}</div>
-                            <div class="radio-group">
-                                <label class="radio-wrapper"><input type="radio" name="5.5" value="0" disabled onchange="calcularScore('auto')"><div class="radio-label">🔴 Não atende</div></label>
-                                <label class="radio-wrapper"><input type="radio" name="5.5" value="3" disabled onchange="calcularScore('auto')"><div class="radio-label">🟢 Atende</div></label>
-                            </div>
-                            <input type="text" class="obs-input" data-cod="5.5" placeholder="ROs em atraso / observação..." readonly>
-                            <div id="ros-5.5" style="font-size:12px; margin-top:8px; color:#475569; line-height:1.55;">Selecione o setor para verificar as ROs.</div>
-                        </div>`;
-                        return;
-                    }
-
                     html += `
                     <div class="item">
                         <div class="item-label">${it.label}</div>
@@ -955,20 +827,27 @@
 
         function openAdmin() { openModal('adminModal'); }
         function checkLogin() {
-            if (document.getElementById('adminPass').value === "gabrielly2026") {
+            const informado = document.getElementById('adminPass').value;
+            const cadastrada = lerSenhaAdministrativa();
+            if (informado && ((!cadastrada) || informado === cadastrada)) {
+                if (!cadastrada) gravarSenhaAdministrativa(informado);
                 document.getElementById('loginSection').style.display = 'none';
                 document.getElementById('configSection').style.display = 'block';
                 document.getElementById('configUrl').value = URL_PLANILHA;
-            } else alert("Senha incorreta!");
+                document.getElementById('newAdminPass').value = cadastrada;
+            } else alert('Senha incorreta!');
         }
         async function testConnection() {
             const url = document.getElementById('configUrl').value.trim();
             if (!/^https:\/\/script\.google\.com\/macros\/s\//.test(url)) return alert('Informe uma URL válida de implantação do Google Apps Script.');
+            const novaSenha = document.getElementById('newAdminPass').value.trim();
+            if (!novaSenha) return alert('Informe uma senha administrativa para este dispositivo.');
             URL_PLANILHA = url;
-            const salvo = gravarConfiguracaoLocal(url);
+            const salvoUrl = gravarConfiguracaoLocal(url);
+            const salvoSenha = gravarSenhaAdministrativa(novaSenha);
             const aviso = document.getElementById('setupWarning');
             if (aviso) aviso.style.display = 'none';
-            alert(salvo ? 'Configuração salva neste dispositivo.' : 'URL aplicada nesta sessão. O navegador bloqueou o armazenamento permanente.');
+            alert(salvoUrl && salvoSenha ? 'Configuração salva neste dispositivo.' : 'Configuração aplicada nesta sessão. O navegador bloqueou o armazenamento permanente.');
             closeModal('adminModal');
         }
         function copyDirectLink() {
@@ -979,9 +858,9 @@
         function limparFormulario() { if(confirm("Deseja limpar todos os campos?")) location.reload(); }
         
         function calcularScore(sid) {
-            const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4','5.5'] };
+            const sensoMap = { 'utilizacao': ['1.1','1.2','1.3'], 'ordenacao': ['2.1','2.2','2.3','2.4'], 'limpeza': ['3.1','3.2'], 'padronizacao': ['4.1','4.2'], 'auto': ['5.1','5.2','5.3','5.4'] };
             const ids = sensoMap[sid]; let total = 0, count = 0;
-            ids.forEach(id => { const v = document.querySelector(`input[name="${id}"]:checked`); if(v) { total += parseFloat(v.value); count++; } });
+            ids.forEach(id => { const v = document.querySelector(`input[name="${id}"]:checked`); if(v) { total += parseInt(v.value); count++; } });
             const perc = count ? (total / (ids.length * 3) * 100).toFixed(1) : 0;
             const el = document.getElementById(`score-${sid}`); el.textContent = perc + "%";
             el.style.color = perc >= 90 ? '#16a34a' : perc >= 75 ? '#ca8a04' : '#dc2626';
@@ -1018,5 +897,12 @@
         }
     </script>
 
+
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+      }
+    </script>
 
 </body></html>
