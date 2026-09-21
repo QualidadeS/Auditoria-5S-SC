@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#00467f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="5S SETA">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
     <title>Sistema 5S Digital - Gabrielly Silva</title>
     <link rel="icon" type="image/png" href="https://files.manuscdn.com/user_upload_by_module/session_file/310519663476236047/aWhAVKuQKCrJuSmh.png">
     <style>
@@ -79,9 +86,14 @@
         .about-list { list-style: none; margin-bottom: 15px; }
         .about-list li { font-size: 13px; margin-bottom: 6px; padding-left: 20px; position: relative; }
         .about-list li::before { content: "•"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+
+        .install-app-btn { display:none; position:fixed; right:16px; bottom:88px; z-index:900; border:0; border-radius:999px; padding:11px 16px; background:var(--primary); color:white; font-weight:800; font-size:13px; box-shadow:0 6px 18px rgba(0,0,0,.18); cursor:pointer; }
+        .install-app-btn.show { display:block; }
+        @media (display-mode: standalone) { .install-app-btn { display:none !important; } }
     </style>
 </head>
 <body>
+    <button id="installAppBtn" class="install-app-btn" type="button">📲 INSTALAR APP</button>
     <div id="loading" class="loading-overlay"><div class="spinner"></div><p id="loadingText" style="font-weight: bold;">Enviando dados...</p></div>
     <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
@@ -1018,5 +1030,40 @@
         }
     </script>
 
+
+    <script>
+        // PWA: instalação e atualização do aplicativo
+        let deferredInstallPrompt = null;
+        const installAppBtn = document.getElementById('installAppBtn');
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            if (installAppBtn) installAppBtn.classList.add('show');
+        });
+
+        if (installAppBtn) {
+            installAppBtn.addEventListener('click', async () => {
+                if (!deferredInstallPrompt) return;
+                deferredInstallPrompt.prompt();
+                await deferredInstallPrompt.userChoice;
+                deferredInstallPrompt = null;
+                installAppBtn.classList.remove('show');
+            });
+        }
+
+        window.addEventListener('appinstalled', () => {
+            deferredInstallPrompt = null;
+            if (installAppBtn) installAppBtn.classList.remove('show');
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js').catch((err) => {
+                    console.error('Falha ao registrar o Service Worker:', err);
+                });
+            });
+        }
+    </script>
 
 </body></html>

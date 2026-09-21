@@ -26,5 +26,12 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "id": "./",
+  "orientation": "any",
+  "lang": "pt-BR",
+  "categories": [
+    "business",
+    "productivity"
   ]
 }
