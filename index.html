@@ -10479,7 +10479,7 @@ function baseTriageSituation(ro){
   // A coluna Status da planilha-base é a fonte de verdade da situação da R.O.
   // Apps Script a expõe como __statusOperacional. ro.status fica como fallback
   // apenas para bases antigas que ainda não enviem o campo técnico.
-  const rawStatus=String(ro?.raw?.__statusOperacional||ro?.status||'').trim();
+  const rawStatus=String(ro?.statusOperacional||ro?.raw?.__statusOperacional||ro?.status||'').trim();
   const status=normalizeAnswer(rawStatus);
 
   if(status.includes('cancel'))return {code:'cancelled',decision:'cancelled',sector,hasSector,rawStatus};
@@ -14315,6 +14315,9 @@ function normalizeImportedRo(raw,index){
     data,
     prazo: prazo==='—'?'—':prazo,
     status,
+    // Valor literal da coluna Status da planilha-base (Interna: AD / Externa: AE).
+    // Não confundir com `status`, que é o rótulo transformado usado na interface.
+    statusOperacional:statusPlanilha,
     descricao,
     pdca,
     pdfUrl: '',
@@ -14652,7 +14655,8 @@ function saveImportedRosByOrigin(internas,externas){
     setorIdentificado:r?.setorIdentificado||'',
     setorResponsavelPlanilha:r?.setorResponsavelPlanilha||'',
     pessoaResponsavel:r?.pessoaResponsavel||'',
-    status:r?.status||''
+    status:r?.status||'',
+    statusOperacional:r?.statusOperacional||r?.raw?.__statusOperacional||''
   });
 
   // Salva apenas se couber; a persistência real já está no IndexedDB.
